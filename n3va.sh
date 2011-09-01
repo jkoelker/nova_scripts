@@ -237,6 +237,16 @@ EOF"
         cd $OPENSTACK
         echo db sync
         $NOVA_DIR/bin/nova-manage --flagfile=$CONFDIR/nova.conf db sync
+        # Redo the flavors
+        mysql -uroot -p$MYSQL_PASS -e "INSERT INTO `instance_types` VALUES
+              (NULL,NULL,NULL,0,'256 slice',1,256,1,10,1,0,150,10),
+              (NULL,NULL,NULL,0,'512 slice',2,512,1,20,2,0,300,20),
+              (NULL,NULL,NULL,0,'1GB slice',3,1024,1,40,3,0,600,30),
+              (NULL,NULL,NULL,0,'2GB slice',4,2048,2,80,4,0,1200,60),
+              (NULL,NULL,NULL,0,'4GB slice',5,4096,2,160,5,0,2500,100),
+              (NULL,NULL,NULL,0,'8GB slice',6,8192,4,320,6,0,2500,150),
+              (NULL,NULL,NULL,0,'15.5GB slice',7,16384,8,620,7,0,2500,200),
+              (NULL,NULL,NULL,0,'30GB slice',8,30720,8,1200,8,0,2500,400);"
         # create an admin user called 'admin'
         echo user
         $NOVA_DIR/bin/nova-manage --flagfile=$CONFDIR/nova.conf user admin admin admin
